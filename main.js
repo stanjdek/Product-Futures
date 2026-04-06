@@ -2,9 +2,9 @@ let questions = [];
 let currentQuestionIndex = 0;
 let timerId = null;
 
-// The timer interval in milliseconds.
-// Set to 8 seconds for testing. In prod this will be 3 * 60 * 1000 to 5 * 60 * 1000.
-const TIMER_INTERVAL = 8000; 
+// The random timer interval boundaries in milliseconds (2 to 5 minutes)
+const MIN_TIME = 2 * 60 * 1000;
+const MAX_TIME = 5 * 60 * 1000;
 
 const questionContainer = document.getElementById('question-container');
 const questionText = document.getElementById('question-text');
@@ -46,11 +46,8 @@ function hideQuestion() {
 }
 
 function startTimer() {
-    // Determine random interval between 3 to 5 minutes for production
-    // const waitTime = Math.random() * (5 * 60 * 1000 - 3 * 60 * 1000) + 3 * 60 * 1000;
-    
-    // Using 8 seconds for testing
-    const waitTime = TIMER_INTERVAL;
+    // Determine random interval between MIN_TIME and MAX_TIME
+    const waitTime = Math.random() * (MAX_TIME - MIN_TIME) + MIN_TIME;
     
     timerId = setTimeout(() => {
         showNextQuestion();
