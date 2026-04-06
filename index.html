@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambient Reflections</title>
+    <meta name="description" content="A calming app designed for peaceful self-reflection">
+    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- The ambient moving background -->
+    <div class="ambient-background" id="ambient-bg"></div>
+
+    <div id="app">
+        <!-- The main question interface, hidden by default -->
+        <main class="question-container" id="question-container">
+            <h1 class="question-text" id="question-text">Loading question...</h1>
+
+            <div class="slider-wrapper">
+                <div class="slider-labels">
+                    <span class="label-left">1 - Doesn't apply to me</span>
+                    <span class="label-right">10 - Very much applies to me</span>
+                </div>
+                <input type="range" min="1" max="10" value="5" class="custom-slider" id="answer-slider">
+                <div class="current-value-display" id="slider-value">5</div>
+            </div>
+
+            <button class="submit-button" id="submit-button">Submit Reflection</button>
+        </main>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
