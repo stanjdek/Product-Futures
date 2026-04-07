@@ -192,7 +192,7 @@ submitButton.addEventListener('click', () => {
             } else {
                 finishSurvey();
             }
-        }, 3000);
+        }, 1000);
 
     } else if (appPhase === "REFLECTION") {
         console.log(`Answered ambient reflection: ${score}`);
