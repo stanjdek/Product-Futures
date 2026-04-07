@@ -10,24 +10,35 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
     <!-- The ambient moving background -->
     <div class="ambient-background" id="ambient-bg"></div>
 
+    <!-- Name Input Overlay -->
+    <div class="name-overlay visible" id="name-overlay">
+        <div class="name-content">
+            <h2>Welcome</h2>
+            <p>Please enter your name to begin the ambient reflection</p>
+            <input type="text" id="user-name-input" placeholder="Your name..." autofocus autocomplete="off">
+            <button class="submit-button" id="start-survey-button">Begin Survey</button>
+        </div>
+    </div>
+
     <div id="app">
         <!-- The main question interface, hidden by default -->
         <main class="question-container" id="question-container">
+            <h2 class="phase-subtitle" id="phase-subtitle" style="color: var(--text-secondary); font-size: 1rem; font-weight: 400; margin-bottom: 2rem; letter-spacing: 2px; text-transform: uppercase;"></h2>
             <h1 class="question-text" id="question-text">Loading question...</h1>
-
             <div class="slider-wrapper">
                 <div class="slider-labels">
-                    <span class="label-left">1 - Doesn't apply to me</span>
-                    <span class="label-right">10 - Very much applies to me</span>
+                    <span class="label-left">1 - Strongly Disagree</span>
+                    <span class="label-right">5 - Strongly Agree</span>
                 </div>
-                <input type="range" min="1" max="10" value="5" class="custom-slider" id="answer-slider">
-                <div class="current-value-display" id="slider-value">5</div>
+                <input type="range" min="1" max="5" value="3" class="custom-slider" id="answer-slider">
+                <div class="current-value-display" id="slider-value">3</div>
             </div>
 
             <button class="submit-button" id="submit-button">Submit Reflection</button>

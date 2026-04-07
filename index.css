@@ -184,4 +184,100 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* --- Name Overlay --- */
+.name-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background: rgba(20, 10, 30, 0.8) !important;
+    z-index: 9999 !important;
+    
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-fast);
+}
+
+.name-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.name-content {
+    text-align: center !important;
+    background: rgba(43, 27, 61, 0.9) !important;
+    padding: 4rem 3rem !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+    min-width: 400px !important;
+    margin: auto !important; /* secondary centering fallback */
+}
+
+.name-content h2 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.name-content p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+
+#user-name-input {
+    width: 100% !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.4) !important;
+    color: #ffffff !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 1.5rem !important;
+    padding: 10px 5px !important;
+    border-radius: 0 !important;
+    margin-bottom: 2.5rem !important;
+    outline: none !important;
+    text-align: center !important;
+    display: block !important;
+    box-shadow: none !important;
+}
+
+#user-name-input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px #2b1b3d inset !important;
+    -webkit-text-fill-color: #fff !important;
+}
+
+#user-name-input:focus {
+    border-bottom-color: #fff !important;
+    background: transparent !important;
+    outline: none !important;
+}
+
+#user-name-input.error {
+    border-color: rgba(255, 100, 100, 0.5);
+    background: rgba(255, 50, 50, 0.05);
+}
+
+#start-survey-button {
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.1);
+    font-weight: 400;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+#start-survey-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
 
