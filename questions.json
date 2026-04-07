@@ -1,19 +1,20 @@
 {
     "introvert": [
-        "Did you feel the need to fill every silence?",
-        "Did you experience stress from finding the right moment to speak?",
-        "Did you spend too much time internally refining instead of speaking?",
-        "Did you feel you needed more time to think than was available?"
+        "Am I waiting for a 'perfect' opening that might never come?",
+        "If I don't say this thought out loud, will the group miss a vital piece of information?",
+        "Is my body language signaling that I'm disengaged or that I'm thinking?",
+        "What is the smallest possible contribution I can make in the next five minutes?"
     ],
     "ambivert": [
-        "Are you mentally overloaded from tracking fast conversation?",
-        "Did you feel your ideas were overlooked or ignored?",
-        "Did you feel balanced in your participation today?"
+        "What is the 'vibe' of the room right now, and am I helping or hurting it?",
+        "If this meeting ended right now, would I be proud of how I showed up?",
+        "Am I listening to understand, or am I just listening to find an opening for my own point?",
+        "What is the one thing we aren't talking about that we probably should be?"
     ],
     "extrovert": [
-        "Did you jump between multiple ideas quickly?",
-        "Did you interrupt others or speak over them?",
-        "Did you add ideas without connecting them to the goal?",
-        "Did you repeat ideas or go in circles?"
+        "Have I already said this in a different way?",
+        "Am I talking to move the meeting forward, or am I just thinking out loud?",
+        "Who is the quietest person in the room, and what would it take to hear their perspective?",
+        "Could I wait ten seconds after someone finishes speaking before I respond?"
     ]
 }

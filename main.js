@@ -11,10 +11,11 @@ let userName = '';
 // We still need your real Anon Key to make this work!
 const supabaseUrl = 'https://kvefgffuwftxwbaizggp.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt2ZWZnZmZ1d2Z0eHdiYWl6Z2dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1NTM1MjIsImV4cCI6MjA5MTEyOTUyMn0.zYxLGvN5pKq2b58JreXI9jtQcqe1AvsJraCRvFHdltM';
-let supabase = null;
+let supabaseClient = null; // Renamed variable
 try {
     if (window.supabase) {
-        supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        // Use the library (window.supabase) to create your client
+        supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
     } else {
         console.warn("Supabase library not found. Was it blocked by an adblocker?");
     }
@@ -57,7 +58,7 @@ async function loadConfig() {
         ]);
         questionsObj = await qsRes.json();
         surveyQuestions = await surveyRes.json();
-        
+
         // Wait for the user to enter their name instead of auto-starting
         console.log("Config loaded. Waiting for user name.");
     } catch (error) {
@@ -68,12 +69,17 @@ async function loadConfig() {
 
 function startSurvey() {
     appPhase = "SURVEY";
-    phaseSubtitle.textContent = `Personality Baseline (${currentSurveyIndex + 1}/${surveyQuestions.length})`;
-    
+
     if (surveyQuestions.length > 0) {
+        phaseSubtitle.textContent = `Personality Baseline (${currentSurveyIndex + 1}/${surveyQuestions.length})`;
         showQuestion(surveyQuestions[currentSurveyIndex]);
     } else {
-        finishSurvey();
+        phaseSubtitle.textContent = "Error Loading Data";
+        showQuestion("It looks like the survey questions failed to load. This usually happens if there's a syntax error in your JSON files, or if you opened the HTML file directly without a web server (which blocks loading local JSON files). Check the browser console (F12) for more details.");
+
+        // Hide the slider since there's no question to answer
+        document.querySelector('.slider-wrapper').style.display = 'none';
+        document.getElementById('submit-button').style.display = 'none';
     }
 }
 
@@ -81,7 +87,7 @@ function finishSurvey() {
     // Calculate category
     const totalScore = surveyScores.reduce((a, b) => a + b, 0);
     const averageScore = totalScore / surveyScores.length;
-    
+
     if (averageScore < 2.5) {
         userPersonality = "introvert";
     } else if (averageScore <= 3.5) {
@@ -89,17 +95,17 @@ function finishSurvey() {
     } else {
         userPersonality = "extrovert";
     }
-    
+
     // Save the score and personality to local storage so it can be checked later
     localStorage.setItem('surveyAverageScore', averageScore.toFixed(2));
     localStorage.setItem('surveyPersonality', userPersonality);
     localStorage.setItem('surveyRawScores', JSON.stringify(surveyScores));
-    
+
     console.log(`Survey complete. Average: ${averageScore.toFixed(1)}. Categorized as: ${userPersonality}`);
-    
+
     // Attempt to save to Supabase
-    if (supabase && supabaseKey !== 'YOUR_ANON_KEY_HERE') {
-        supabase.from('survey_responses').insert([{
+    if (supabaseClient && supabaseKey !== 'YOUR_ANON_KEY_HERE') {
+        supabaseClient.from('survey_responses').insert([{
             name: userName,
             personality: userPersonality,
             average_score: averageScore,
@@ -111,10 +117,10 @@ function finishSurvey() {
     } else {
         console.warn("Could not save to Supabase: The Anon Key is missing or Supabase failed to load.");
     }
-    
+
     // Set our active pool
     activeQuestionPool = questionsObj[userPersonality] || [];
-    
+
     // Move to ambient state
     appPhase = "REFLECTION";
     hideQuestion();
@@ -123,7 +129,7 @@ function finishSurvey() {
 
 function showQuestion(text) {
     questionText.textContent = text;
-    
+
     if (appPhase === "SURVEY") {
         answerSlider.min = "1";
         answerSlider.max = "5";
@@ -139,7 +145,7 @@ function showQuestion(text) {
         answerSlider.value = 5;
         sliderValueDisplay.textContent = "5";
     }
-    
+
     // Fade in
     questionContainer.classList.add('visible');
 }
@@ -150,16 +156,16 @@ function hideQuestion() {
 
 function startAmbientTimer() {
     phaseSubtitle.textContent = ``;
-    
+
     const waitTime = Math.random() * (MAX_TIME - MIN_TIME) + MIN_TIME;
     console.log(`Waiting for ${Math.round(waitTime / 1000)}s before next reflection.`);
-    
+
     timerId = setTimeout(() => {
         if (activeQuestionPool.length === 0) return;
-        
+
         // Pick random question from evaluated active pool
         const randomIndex = Math.floor(Math.random() * activeQuestionPool.length);
-        
+
         showQuestion(activeQuestionPool[randomIndex]);
     }, waitTime);
 }
@@ -171,13 +177,13 @@ answerSlider.addEventListener('input', (e) => {
 
 submitButton.addEventListener('click', () => {
     const score = parseInt(answerSlider.value, 10);
-    
+
     if (appPhase === "SURVEY") {
         surveyScores.push(score);
         hideQuestion();
-        
+
         currentSurveyIndex++;
-        
+
         // Wait 3 seconds for calm ambient reset between survey questions
         setTimeout(() => {
             if (currentSurveyIndex < surveyQuestions.length) {
@@ -186,8 +192,8 @@ submitButton.addEventListener('click', () => {
             } else {
                 finishSurvey();
             }
-        }, 3000); 
-        
+        }, 3000);
+
     } else if (appPhase === "REFLECTION") {
         console.log(`Answered ambient reflection: ${score}`);
         hideQuestion();
@@ -207,20 +213,20 @@ startSurveyButton.addEventListener('click', () => {
         }
         return;
     }
-    
+
     // Give immediate feedback
     startSurveyButton.textContent = "Starting...";
     startSurveyButton.style.opacity = '0.5';
-    
+
     userName = enteredName;
-    
+
     // Wait briefly so they see the button react, then fade overlay fast
     setTimeout(() => {
         nameOverlay.classList.remove('visible');
         setTimeout(() => {
             nameOverlay.style.display = 'none'; // fully remove from flow 
             startSurvey();
-        }, 800); 
+        }, 800);
     }, 200);
 });
 
